@@ -5,49 +5,63 @@ using UnityEngine;
 public class BallShoot : MonoBehaviour
 {
     public float ballSpeed;
-    const int speedLimit = 55;
     public Rigidbody ball;
+    public GameObject triggerBall;
     public Vector3 initialPosBall;
-    private bool charging;
-    private bool shoot;
+    public bool shoot;
+    public float force;
+    public float forceLimit;
+    private float timer =0;
+    private float timeToReset = 15;
 
     void Start()
     {
         initialPosBall = ball.position;
-        charging = false;
         shoot = false;
     }
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if(Input.GetKey(KeyCode.UpArrow))
         {
-            charging = true;
-
-            if (ballSpeed <= speedLimit)
-                ballSpeed += 10 * Time.deltaTime;
+            if(force <= forceLimit)
+                force += ballSpeed * Time.deltaTime;
         }
-        else if(!Input.GetKey(KeyCode.Space) && charging)
+        if (Input.GetKey(KeyCode.DownArrow))
         {
-            charging = false;
-
-            if (!charging)
-            {
-                shoot = true;
-            }
+            if (force >= 0)
+                force -= ballSpeed * Time.deltaTime;
         }
+        if(Input.GetKeyDown(KeyCode.Space) && !shoot && force > 0)
+        {
+            ball.AddForce(new Vector3(0, 0, force));
+            shoot = true;
+        }
+
         if(shoot)
+            timer += Time.deltaTime;
+
+        if(timer >= timeToReset )
         {
-            ball.transform.position += (Vector3.forward * ballSpeed) * Time.deltaTime;
+            resetBallValues();
         }
-        if (Input.GetKeyDown(KeyCode.R))
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(triggerBall == other.gameObject)
         {
-            ball.position = initialPosBall;
-            ball.angularVelocity = Vector3.zero;
-            ball.velocity = Vector3.zero;
-            ballSpeed = 0;
-            shoot = false;
-            charging = false;
+            resetBallValues();
         }
+    }
+
+    void resetBallValues()
+    {
+        ball.position = initialPosBall;
+        ball.angularVelocity = Vector3.zero;
+        ball.velocity = Vector3.zero;
+        force = 0;
+        shoot = false;
+        timer = 0;
     }
 }

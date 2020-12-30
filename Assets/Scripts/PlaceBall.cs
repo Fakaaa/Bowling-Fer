@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlaceBall : MonoBehaviour
 {
     public Rigidbody ball;
+    public BallShoot script;
     private float speedMove;
 
     void Start()
@@ -14,11 +15,11 @@ public class PlaceBall : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKey(KeyCode.LeftArrow))
+        if(Input.GetKey(KeyCode.LeftArrow) && !script.shoot)
         {
             ball.transform.position += (Vector3.left * speedMove) * Time.deltaTime;
         }
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.RightArrow) && !script.shoot)
         {
             ball.transform.position += (Vector3.right * speedMove) * Time.deltaTime;
         }
