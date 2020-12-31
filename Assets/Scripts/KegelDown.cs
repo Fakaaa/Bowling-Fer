@@ -19,4 +19,12 @@ public class KegelDown : MonoBehaviour
                 gameObject.SetActive(false);
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (gameObject == other.gameObject)
+        {
+            gameObject.SetActive(false);
+        }
+    }
 }

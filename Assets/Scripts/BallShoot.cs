@@ -11,8 +11,9 @@ public class BallShoot : MonoBehaviour
     public bool shoot;
     public float force;
     public float forceLimit;
-    private float timer =0;
-    private float timeToReset = 15;
+    public float timer =0;
+    public float timeToReset = 15;
+    public int amountShoots;
 
     void Start()
     {
@@ -63,5 +64,6 @@ public class BallShoot : MonoBehaviour
         force = 0;
         shoot = false;
         timer = 0;
+        amountShoots++;
     }
 }
